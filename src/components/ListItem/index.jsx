@@ -1,80 +1,56 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { Text, View, Image } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import styles from './styles';
 
-const ListItem = () => {
+const MarketCap=(mcap)=>{
+  if(mcap > 1_000_000_000_000){
+    return `${(mcap/1_000_000_000_000).toFixed(3)} T`
+  }
+  if(mcap > 1_000_000_000){
+    return `${(mcap/1_000_000_000).toFixed(3)} B`
+  }
+  if(mcap > 1_000_000){
+    return `${(mcap/1_000_000).toFixed(3)} M`
+  }
+  if(mcap > 1_000){
+    return `${(mcap/1_000).toFixed(3)} K`
+  }
+  return mcap
+}
+
+const ListItem = ({name,rank, img, symbol, currPrice, perc, mcap}) => {
   return (
     <View style={[styles.list]}>
         <Image 
-          source={{uri: 'https://assets.coingecko.com/coins/images/1/thumb_2x/bitcoin.png?1547033579'}} 
-          style={{height:40, width:40, alignSelf: 'center'}} 
+          source={{uri: img}} 
+          style={{height:30, width:30, alignSelf: 'center'}} 
         />
         <View style={[styles.details]}>
           <Text style={[styles.title]}>
-            Bitcoin
+            {name}
           </Text>
           <View style={{flexDirection: 'row'}}>
             <View style={styles.rank}>
-            <Text style={[styles.text,{marginLeft: 0, fontWeight: 'bold'}]}>1</Text>
+            <Text style={[styles.text,{marginLeft: 0, fontWeight: 'bold'}]}>{rank}</Text>
             </View>
             <View style={{alignItems: 'center', flexDirection: 'row'}}>
-              <Text style={styles.text}>BTC</Text>
+              <Text style={styles.text}>{symbol.toUpperCase()}</Text>
               <AntDesign 
-                name="caretup" 
+                name={perc >  0?'caretup':'caretdown'}
                 size={13} 
-                color="#00e28c" 
+                color={perc>0?"#00e28c":'#fe1439' }
                 style={{marginLeft: 5}}
               />
-              <Text style={styles.text}>1,02 %</Text>
+              <Text style={[styles.text,{color:perc>0?"#00e28c":'#fe1439' }]}>{parseFloat(perc).toFixed(2)} %</Text>
             </View>
           </View>
         </View>
         <View style={{marginLeft: 'auto'}}>
-          <Text style={[styles.price]}>56.998,33</Text>
-          <Text style={[styles.MCap]}>MCap 1,079 T</Text>
+          <Text style={[styles.price, {marginLeft: 'auto'}]}>{currPrice}</Text>
+          <Text style={[styles.MCap]}>MCap {MarketCap(mcap)}</Text>
         </View>
       </View>
   );
 };
-const styles = StyleSheet.create({
-  list:{
-    flexDirection: 'row',
-    borderBottomColor: '#3c465f',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    paddingHorizontal: 10,
-    alignItems: 'center',
-    paddingBottom:10
-  },
-  details:{
-    marginLeft: 20,
-
-  },
-  title:{
-    color: '#fff',
-    fontSize: 18,
-    fontWeight:'bold',
-    marginBottom: 7
-  },
-  rank:{
-    backgroundColor: '#323446',
-    height:17,
-    width: 17,
-    borderRadius: 3, 
-    alignItems: 'center',
-  },
-  text:{
-    color: '#9fa6bc',
-    marginLeft: 5
-  },
-  price:{
-    fontSize: 18,
-    fontWeight: 'bold',
-    color:'white',
-    marginBottom: 7
-  },
-  MCap:{
-    color: '#9fa6bc',
-    fontSize: 15
-  }
-});
 export default ListItem;
