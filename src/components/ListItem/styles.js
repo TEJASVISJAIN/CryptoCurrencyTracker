@@ -22,8 +22,6 @@ export default StyleSheet.create({
   },
   rank:{
     backgroundColor: '#323446',
-    height:20,
-    width: 20,
     borderRadius: 3, 
     alignItems: 'center',
   },
